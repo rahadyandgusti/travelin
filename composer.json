@@ -11,7 +11,8 @@
         "backpack/crud": "^3.1",
         "nicolaslopezj/searchable": "^1.9",
         "laravel/scout": "^2.0",
-        "sofa/eloquence": "^5.3"
+        "sofa/eloquence": "^5.3",
+        "maatwebsite/excel": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
