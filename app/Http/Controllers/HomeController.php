@@ -3,37 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\CitiesModel;
+
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    protected $vFolder = 'page.public';
+
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        if(Auth::user()->group == 'logum')
-            return redirect()->route('bill.logum.index');
-        else if(Auth::user()->group == 'sdm')
-            return redirect()->route('bill.sdm.index');
+    public function index(){
+        $data['slides'] = CitiesModel::select('slide','name')->take(5)->get();
+        return view($this->vFolder . '.home',$data);
+    }
 
-        $data = [
-            'breadCumb' => [
-                ['link' => url('/'), 'name' => 'home']
-            ],
-        ];
-        return view('dashboard',$data);
+    public function searchCity(Request $request){
+    	// return 'dsgs';
+        $data = CitiesModel::join('provinces','provinces.id','cities.id_province')
+                ->select('cities.id','cities.name as text','cities.logo','provinces.name')
+                ->where('cities.name','like','%'.$request->get('q').'%')
+                ->orWhere('provinces.name','like','%'.$request->get('q').'%')
+                ->get()->toArray();
+    	return json_encode($data);
+    }
+
+    public function search(Request $request){
+        $data = CitiesModel::join('provinces','provinces.id','cities.id_province')
+                ->select('cities.id','cities.name as text','cities.logo','provinces.name')
+                ->where('cities.name','like','%pe%')
+                // ->orWhere('provinces.name','like','%pe%')
+                ->get()->toArray();
+        return json_encode($data);
+        return view($this->vFolder . '.search',$data);
     }
 }

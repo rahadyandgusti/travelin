@@ -1,0 +1,91 @@
+.bg-green{
+	background-color: #99CC99 !important;
+	color: #fff !important;
+}
+
+header.navbar a.navbar-brand-travelin {
+    background-color: transparent !important;
+    background-size: 225px auto !important;
+    background-image: none !important;
+    float: left;
+}
+
+.navbar-nav .nav-link {
+	color: #fff !important;
+}
+
+.login-form{
+	width: 200px;
+	padding: 10px;
+}
+
+.form-inline input,.form-inline select,.form-inline button,.form-inline .select2{
+	width: 100% !important;
+}
+
+.margin{
+	margin:15px !important;
+}
+.no-margin{
+	margin: 0px !important;
+}
+.margin-left{
+	margin-left: 15px !important;
+}
+.margin-right{
+	margin-right: 15px !important;
+}
+.margin-top{
+	margin-top: 15px !important;
+}
+.margin-bottom{
+	margin-bottom: 15px !important;
+}
+.no-margin-left{
+	margin-left: 0px !important;
+}
+.no-margin-right{
+	margin-right: 0px !important;
+}
+.no-margin-top{
+	margin-top: 0px !important;
+}
+.no-margin-bottom{
+	margin-bottom: 0px !important;
+}
+
+
+.padding{
+	padding:15px !important;
+}
+.no-padding{
+	padding: 0px !important;
+}
+.padding-left{
+	padding-left: 15px !important;
+}
+.padding-right{
+	padding-right: 15px !important;
+}
+.padding-top{
+	padding-top: 15px !important;
+}
+.padding-bottom{
+	padding-bottom: 15px !important;
+}
+.no-padding-left{
+	padding-left: 0px !important;
+}
+.no-padding-right{
+	padding-right: 0px !important;
+}
+.no-padding-top{
+	padding-top: 0px !important;
+}
+.no-padding-bottom{
+	padding-bottom: 0px !important;
+}
+
+.flat{
+	border-radius: 0px !important;
+}

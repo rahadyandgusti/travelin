@@ -266,7 +266,7 @@ body {
   font-size: 0.875rem;
   line-height: 1.5;
   color: #263238;
-  background-color: #e4e5e6; }
+  background-color: #fff; }
 
 [tabindex="-1"]:focus {
   outline: none !important; }

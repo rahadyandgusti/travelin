@@ -18,7 +18,7 @@
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,jQuery,CSS,HTML,RWD,Dashboard">
     <link rel="shortcut icon" href="img/favicon.png">
 
-    <title>PLN UPB Sumbagteng</title>
+    <title>{{config('app.name','travelin')}}</title>
 
     <!-- Icons -->
     <link href="{!! asset('assets/dist/css/font-awesome.min.css') !!}" rel="stylesheet">
@@ -43,6 +43,7 @@
 
     <!-- Main styles for this application -->
     <link href="{!! asset('assets/dist/css/style.css') !!}" rel="stylesheet">
+    <link href="{!! asset('assets/dist/css/style-travelin.css') !!}" rel="stylesheet">
     <style type="text/css">
         .breadcrumb, .navbar{
             border-radius: 0px !important;
@@ -52,6 +53,28 @@
         }
         .margin-bottom{
             margin-bottom: 15px !important;
+        }
+
+        .option{
+            width: 100%;
+            clear: both;
+        }
+        .option .image{
+            width: 30px;
+            float: left
+        }
+        .option .image img{
+            width: 100%;
+        }
+        .option .info{
+            margin-left: 30px;
+            padding:5px;
+        }
+        .option .info .province-name{
+            font-size: 11px;
+        }
+        .option .info .city-name{
+            font-weight: bold;
         }
     </style>
 
@@ -67,9 +90,11 @@
     <main class="main">
         
         <!-- Breadcrumb -->
-        <ol class="breadcrumb">
-        
-        </ol>
+<!--         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="coba">coba</a>
+            </li>
+            <li class="breadcrumb-item active">coba aktif</li>
+        </ol> -->
         
 
 
@@ -85,7 +110,6 @@
     <footer class="footer">
         <span class="text-center">
             Developed with &hearts; by <a href="http://tlab.co.id">T'lab</a> &copy; 2016  
-            <!--  © 2016. -->
         </span>
     </footer>
     
@@ -131,16 +155,67 @@
                     @endforeach
                 @endforeach
             @endif
-        });
 
-    </script>
+            $(".search-kota").select2({
+                ajax: {
+                    url: "{{url('search/get/city')}}",
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: function (params) {
+                        return {
+                          q: params.term, // search term
+                        };
+                    },
+                    processResults:function (data, page) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data
+                    // console.log(data);
+                    return {results:data};
+                    },
+                    cache: true
+                },
+                placeholder:"All",
+                minimumInputLength: 2,
+                templateResult: formatRepo, // omitted for brevity, see the source of this page
+                // templateSelection: formatRepo, // omitted for brevity, see the source of this page
+                // dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+                escapeMarkup: function (m) { return m; }
+            });
+
+            function formatRepo (repo) {
+                 console.log(repo);
+                 var markup = "";
+                
+                    if (repo.loading) return repo.text;
+                    markup += "<div class='option'>" +
+                    "<div class='image'><img src='{{asset('uploads/logo/city/thumb')}}/" + repo.logo + "' /></div>" +
+                    "<div class='info'>" +
+                      "<div class='city-name'>" + 
+                      repo.text 
+                      + "</div>";
+                      if(repo.name)
+                    markup += "<div class='province-name'>" + repo.name + "</div>";
+                    markup += 
+                    "</div>"+
+                    '<div class="clearfix"></div>'+
+                    "</div>";
+                // console.log(markup);
+                return markup;
+            }
+
+        });
+        
+</script>
 
     <!-- Plugins and scripts required by this views -->
     @stack('callFoot')
 
-    
-    
-    
 </body>
+<footer class="footer">
+    <span class="">
+        Developed by Rahadyan D Gusti  
+    </span>
+</footer>
 
 </html>

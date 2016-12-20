@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'PLN Sumbagteng',
+    'name' => 'Travelin',
 
     /*
     |--------------------------------------------------------------------------
@@ -166,14 +166,12 @@ return [
         /*
          * Package Service Providers...
          */
-
-        Collective\Html\HtmlServiceProvider::class,
-        Kris\LaravelFormBuilder\FormBuilderServiceProvider::class,
-        Yajra\Datatables\DatatablesServiceProvider::class,
-        
         App\Providers\HelperServiceProvider::class,
 
-        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Backpack\Base\BaseServiceProvider::class,
+        Backpack\CRUD\CrudServiceProvider::class,
+
+        Sofa\Eloquence\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -232,11 +230,6 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
-        'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
-
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

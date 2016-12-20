@@ -39,16 +39,7 @@ trait AuthenticatesUsers
             return $this->sendLockoutResponse($request);
         }
 
-        // if ($this->attemptLogin($request)) {
-        //     return $this->sendLoginResponse($request);
-        // }
-
-        $use_name = filter_var($request->input($this->username()), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        $request->merge([$use_name => $request->input('email')]);
-
-        // $credentials = $this->credentials($request);
-
-        if ($this->guard()->attempt($request->only($use_name, 'password'), $request->has('remember'))) {
+        if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
 
