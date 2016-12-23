@@ -17,6 +17,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 Route::get('search/get/city', 'HomeController@searchCity');
 Route::get('search/','HomeController@search');
+Route::get('wisata/{id}','HomeController@getWisata');
 
 CRUD::resource('admin/province', 'ProvincesController');
 CRUD::resource('admin/city', 'CitiesController');

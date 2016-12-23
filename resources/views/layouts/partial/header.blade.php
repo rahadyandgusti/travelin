@@ -8,11 +8,14 @@
                 <div class="form-group col-md-3 no-padding-left">
                     <!-- <input type="text" class="form-control"> -->
                         <select class="search-kota select2" name="city" >
-                          <!-- <option value="ivaynberg/select2" selected="selected">ivaynberg/select2</option> -->
+                            @if(isset($city))
+                                <option value="{{$city->id}}" selected="selected">{{$city->name}}</option>
+                            @endif
                         </select>
                 </div>
                 <div class="form-group col-md-7 no-padding-left">
-                    <input type="text" class="form-control" name="search" placeholder="Where do you want to go?">
+                    <input type="text" class="form-control" name="search" placeholder="Where do you want to go?"
+                    value="{{(isset($search)?$search:'')}}">
                 </div>
                 <div class="form-group col-md-2 no-padding-left">
                 <button type="submit" class="btn-xs btn btn-secondary">

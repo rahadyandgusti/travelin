@@ -175,6 +175,7 @@
                     },
                     cache: true
                 },
+                allowClear: true,
                 placeholder:"All",
                 minimumInputLength: 2,
                 templateResult: formatRepo, // omitted for brevity, see the source of this page
