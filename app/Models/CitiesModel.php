@@ -90,7 +90,7 @@ class CitiesModel extends Model
             $return = $filename;
         }
         else if(starts_with($value, url('/'))){
-            $return = str_replace(url($destination_path).'/', '', $value);
+            $return = str_replace(url($disk.'/'.$destination_path).'/', '', $value);
         }
         return $return?$return:'';
     }

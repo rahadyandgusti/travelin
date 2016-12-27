@@ -106,6 +106,8 @@
         <!-- /.conainer-fluid -->
     </main>
 
+    @include('layouts.partial.aside')
+
 
     <footer class="footer">
         <span class="text-center">

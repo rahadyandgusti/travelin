@@ -66,6 +66,9 @@
                     </div>
                 </li>
                 @endif
+                <li class="nav-item">
+                    <a class="nav-link aside-toggle" href="#">☰</a>
+                </li>
             </ul>
             </div>
         </div>

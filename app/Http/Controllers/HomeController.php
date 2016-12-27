@@ -18,7 +18,7 @@ class HomeController extends Controller
     }
 
     public function index(){
-        $data['slides'] = CitiesModel::select('slide','name')->take(5)->get();
+        $data['slides'] = CitiesModel::select('slide','name','id')->take(5)->get();
         return view($this->vFolder . '.home',$data);
     }
 
@@ -104,7 +104,7 @@ class HomeController extends Controller
     public function getWisata($id){
         $data = WisataModel::join('cities','cities.id','wisata.id_city')
                 ->join('provinces','provinces.id','cities.id_province')
-                ->select('wisata.id','wisata.name','wisata.image','cities.name as cityName','provinces.name as provinceName','wisata.description')
+                ->select('wisata.id','wisata.name','wisata.image','cities.name as cityName','provinces.name as provinceName','wisata.description','wisata.updated_at as date')
                 ->where('wisata.id',$id);
 
         $d['data'] = $data->first();

@@ -15,5 +15,9 @@ class GlobalHelper {
 		else
 			return asset('uploads/not-found.jpg');
 	}	
+
+	public static function getDate($date, $format = 'd F Y') {
+        return (!is_null($date)) ? (new DateTime($date))->format($format) : "-";
+    }
 }
 ?>

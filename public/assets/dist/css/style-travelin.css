@@ -2,6 +2,18 @@
 	background-color: #99CC99 !important;
 	color: #fff !important;
 }
+.bg-red{
+	background-color: red !important;
+	color: #fff !important;
+}
+.bg-brown{
+	background-color: brown !important;
+	color: #fff !important;
+}
+.bg-yellow{
+	background-color: yellow !important;
+	color: #fff !important;
+}
 
 header.navbar a.navbar-brand-travelin {
     background-color: transparent !important;
