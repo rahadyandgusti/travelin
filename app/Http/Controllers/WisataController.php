@@ -10,7 +10,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 class WisataController extends CrudController
 {
-    protected $path = 'uploads/image/wisata/original/';
+    protected $path = 'uploads/image/wisata/big/';
 	public function __construct() {
         parent::__construct();
 
@@ -57,7 +57,7 @@ class WisataController extends CrudController
                         'type' => 'image_cropped',
                         'upload' => true,
                         'crop' => true, // set to true to allow cropping, false to disable
-                        'aspect_ratio' => (1366/500), // ommit or set to 0 to allow any aspect ratio
+                        'aspect_ratio' => (633/400), // ommit or set to 0 to allow any aspect ratio
                         'path' => $this->path,
                     ]);
     

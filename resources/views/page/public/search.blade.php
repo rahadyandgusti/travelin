@@ -14,7 +14,7 @@
 				<div class="col-md-4">
 				<a href="{{url('wisata/'.$d->id)}}" class="search-link">
 					<div class="card flat">
-						<img class="img-thumbnail flat" src="{{asset('uploads/image/wisata/original/'.$d->image)}}" width="100%">
+						<img class="img-thumbnail flat" src="{{asset('uploads/image/wisata/big/'.$d->image)}}" width="100%">
 						<div class="card-block">
 							<div class="information">
 								<label class="title">{{ucfirst($d->name)}}</label>

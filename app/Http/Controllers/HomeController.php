@@ -19,6 +19,8 @@ class HomeController extends Controller
 
     public function index(){
         $data['slides'] = CitiesModel::select('slide','name','id')->take(5)->get();
+        $data['viewed'] = WisataModel::select('image','name','id')->orderBy('id','asc')->take(4)->get();
+        $data['rated'] = WisataModel::select('image','name','id')->orderBy('id','desc')->take(4)->get();
         return view($this->vFolder . '.home',$data);
     }
 
@@ -33,11 +35,6 @@ class HomeController extends Controller
     }
 
     public function search(Request $request){
-        // $data = WisataModel::join('cities','cities.id','wisata.id_city')
-                // ->join('provinces','provinces.id','cities.id_province')
-                // ->select('wisata.id','wisata.name','wisata.image','cities.name as cityName','provinces.name as provinceName','wisata.description');
-
-
         $table = 'select id,name,image,cityName,provinceName,description from (select w.id,w.name,w.image,c.name as cityName,p.name as provinceName,w.description,(';
         
         if($request->get('search')){
