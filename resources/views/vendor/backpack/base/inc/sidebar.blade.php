@@ -17,17 +17,18 @@
         <ul class="sidebar-menu">
           <li><a href="{{ url(config('backpack.base.route_prefix', 'admin').'/dashboard') }}"><i class="fa fa-dashboard"></i> <span>{{ trans('backpack::base.dashboard') }}</span></a></li>
 
-          <li class="header">Configuration</li>
-          
-          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/elfinder') }}"><i class="fa fa-files-o"></i> <span>File manager</span></a></li>
-          <li class="header">Master</li>
-
-          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/province') }}"><i class="fa fa-files-o"></i> <span>Province</span></a></li>
-
-          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/city') }}"><i class="fa fa-files-o"></i> <span>City</span></a></li>
-
           <li class="header">Main</li>
           <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/wisata') }}"><i class="fa fa-files-o"></i> <span>Wisata</span></a></li>
+
+          <li class="header">Master</li>
+          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/province') }}"><i class="fa fa-files-o"></i> <span>Provinces</span></a></li>
+
+          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/city') }}"><i class="fa fa-files-o"></i> <span>Cities</span></a></li>
+
+          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/categories') }}"><i class="fa fa-files-o"></i> <span>Categories</span></a></li>
+
+          <li class="header">Configuration</li>
+          <li><a href="{{ url(config('backpack.base.route_prefix', 'admin') . '/elfinder') }}"><i class="fa fa-files-o"></i> <span>File manager</span></a></li>
 
           <li class="header">{{ trans('backpack::base.user') }}</li>
           <li><a href="{{ url(config('backpack.base.route_prefix', 'admin').'/logout') }}"><i class="fa fa-sign-out"></i> <span>{{ trans('backpack::base.logout') }}</span></a></li>

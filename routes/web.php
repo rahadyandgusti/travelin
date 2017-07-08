@@ -22,4 +22,5 @@ Route::get('wisata/{id}','HomeController@getWisata');
 CRUD::resource('admin/province', 'ProvincesController');
 CRUD::resource('admin/city', 'CitiesController');
 CRUD::resource('admin/wisata', 'WisataController');
+CRUD::resource('admin/categories', 'CategoriesController');
 ?>
