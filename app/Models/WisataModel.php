@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
+use Laravel\Scout\Searchable;
 
 class WisataModel extends Model
 {
-    use CrudTrait;
+    use CrudTrait,Searchable;
 
     protected $table = 'wisata';
 

@@ -8,11 +8,11 @@ use Backpack\CRUD\CrudTrait;
 //use Nicolaslopezj\Searchable\SearchableTrait;
 
 // use Sofa\Eloquence\Eloquence;
+use Laravel\Scout\Searchable;
 
 class CitiesModel extends Model
 {
-	use CrudTrait;//,Eloquence;
-    //,SearchableTrait
+	use CrudTrait,Searchable;
 
     protected $table = 'cities';
 

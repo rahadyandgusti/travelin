@@ -1,13 +1,16 @@
 <!-- select multiple -->
 <div @include('crud::inc.field_wrapper_attributes') >
     <label>{!! $field['label'] !!}</label>
+    @include('crud::inc.field_translatable_icon')
     <select
     	class="form-control"
         name="{{ $field['name'] }}[]"
         @include('crud::inc.field_attributes')
     	multiple>
 
-    	<option value="">-</option>
+		@if (!isset($field['allows_null']) || $field['allows_null'])
+			<option value="">-</option>
+		@endif
 
     	@if (isset($field['model']))
     		@foreach ($field['model']::all() as $connected_entity_entry)

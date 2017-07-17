@@ -17,6 +17,14 @@ class HomeController extends Controller
         // $this->middleware('auth');
     }
 
+    public function indexNew(){
+        // $data['slides'] = CitiesModel::select('slide','name','id')->take(5)->get();
+        // $data['viewed'] = WisataModel::select('image','name','id')->orderBy('id','asc')->take(4)->get();
+        // $data['rated'] = WisataModel::select('image','name','id')->orderBy('id','desc')->take(4)->get();
+        $data = [];
+        return view($this->vFolder . '-new.home',$data);
+    }
+
     public function index(){
         $data['slides'] = CitiesModel::select('slide','name','id')->take(5)->get();
         $data['viewed'] = WisataModel::select('image','name','id')->orderBy('id','asc')->take(4)->get();
@@ -108,4 +116,29 @@ class HomeController extends Controller
 
         return view($this->vFolder . '.detail',$d);
     }
+
+    /*
+    * Ajax
+    */
+
+    public function getSliderCover(){
+        $sliders = CitiesModel::select('slide','name','id')->take(5)->get();
+        return response()->json($sliders);
+    }
+
+    public function getCityList(){
+        $sliders = CitiesModel::select('slide','name','id')->take(5)->get();
+        return response()->json($sliders);
+    }
+
+    public function getViewedList(){
+        $sliders = WisataModel::select('image','name','id')->orderBy('id','asc')->take(6)->get();
+        return response()->json($sliders);
+    }
+
+    public function getRatedList(){
+        $sliders = WisataModel::select('image','name','id')->orderBy('id','desc')->take(4)->get();
+        return response()->json($sliders);
+    }
+
 }

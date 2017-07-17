@@ -20,6 +20,270 @@ All Notable changes to `Backpack CRUD` will be documented in this file
 - Nothing
 
 
+## [3.2.13] - 2017-07-07
+
+## Added
+- German translation, thanks to [Oliver Ziegler](https://github.com/OliverZiegler);
+- PHP 7.1 to TravisCI;
+
+### Fixed
+- resources loaded twice on tabbed forms - fixes #509;
+- beforeColumn and afterColumn not working after setFromDb();
+- afterField() always placing the field on the second position;
+- date_range filter - clear button now works;
+- select2 variants load the JS and CSS from CDN now to fix styling issues;
+- show_fields error when no tabs on CRUD entity;
+
+## [3.2.12] - 2017-05-31
+
+### Added
+- Latvian translation files (thanks to [Erik Bonder](https://github.com/erik-ropez));
+- Russian translation files (thanks to [Aleksei Budaev](https://a-budaev.ru/));
+- Dutch translation files (thanks to [Jelmer Visser](https://github.com/jelmervisser))
+
+### Fixed
+- allow for revisions by non-logged-in users; fixes #566;
+- upgraded Select2 to the latest version, in all select2 fields;
+- fixed select2_from_ajax_multiple;
+- translated "edit translations" button;
+- localize the filters navbar view;
+- inline validation error for array fields;
+- moved button initialization to CrudPanel constructor;
+- pagelength bug; undoes PR #596;
+
+
+## [3.2.11] - 2017-04-21
+
+### Removed
+- Backpack\CRUD no longer loads translations, as Backpack\Base does it for him.
+
+## [3.2.10] - 2017-04-21
+
+### Added
+- prefix feature to the image field;
+
+### Fixed
+- select_multiple has allows_null option;
+- details_row for AjaxDataTables;
+
+
+## [3.2.9] - 2017-04-20
+
+### Added
+- email column type;
+
+### Fixed
+- fewer ajax requests when using detailsRow;
+- redirect back to the same entry - fixed by #612;
+- use "admin" as default elfinder prefix;
+- datepicker error fixed by [Pavol Tanuška](https://github.com/pavoltanuska);
+- simplemde field also triggered ckeditor when place before it, because of an extra class;
+- details row column can be clicked entirely (thanks to [votintsev](https://github.com/votintsev));
+- simpleMDE bug fixes and features #507 (thanks to [MarcosBL](https://github.com/MarcosBL));
+- allow for dot notation when specifying the label of a reordered item (thanks to [Adam Kelsven](https://github.com/a2thek26));
+
+
+## [3.2.8] - 2017-04-03
+
+### Added
+- fixed typo in saveAction functionality;
+- checklist field had hardcoded primary key names;
+- french translation for buttons;
+
+## [3.2.7] - 2017-03-16
+
+### Added
+- Simplified Chinese translation - thanks to [Zhongwei Sun](https://github.com/sunzhongwei);
+- date and date_range filters - thanks to [adriancaamano](https://github.com/adriancaamano);
+
+### Fixed
+- fixed horizontal scrollbar showing on list view;
+- fixed edit and create extended CSS and JS files not loading;
+- fixed AjaxDataTables + filters bug (encoded URL strings);
+- replaced camel_case() with str_slug() in tab ids, to provide multibyte support;
+
+
+## [3.2.6] - 2017-03-13
+
+### Fixed
+- custom created_at and updated_at columns threw errors on PHP 5.6;
+
+
+## [3.2.5] - 2017-03-12
+
+### Fixed
+- SaveActions typo - fixes #504;
+- Allow for custom created_at and updated_at db columns - fixes #518;
+- base64_image field - preserve the original image format when uploading cropped image;
+- fix bug where n-n relationship on CREATE only triggers error - fixes #512;
+- reduce the number of queries when using the Tabs feature - fixes #461;
+
+
+## [3.2.4] - 2017-02-24
+
+### Fixed
+- Spanish translation;
+- Greek translation;
+- select2_from_ajax, thanks to [MarcosBL](https://github.com/MarcosBL);
+- Translatable "Add" button in table field view;
+
+## [3.2.3] - 2017-02-14
+
+### Fixed
+- Spatie/Translatable fake columns had some slashed added to the json - fixes #442;
+
+
+## [3.2.2] - 2017-02-13
+
+### Fixed
+- CrudTrait::getCastedAttributes();
+
+
+
+## [3.2.1] - 2017-02-13
+
+### Fixed
+- removed a few PHP7 methods, so that PHP 5.6.x is still supported;
+
+
+## [3.2.0] - 2017-02-13
+
+### Added
+- form save button better UI&UX: they have the options in a dropdown instead of radio buttons and the default behaviour is stored in the session upon change - thanks to [Owen Melbourne](https://github.com/OwenMelbz);
+- redirect_after_save button actions;
+- filters on list views (deleted the 3.1.41 and 4.1.42 tags because they were breaking changes);
+- routes are now abstracted intro CrudRoute, so that new routes can be easily added;
+- Greek translation (thanks [Stamatis Katsaounis](https://github.com/skatsaounis));
+- tabbed create&update forms - thanks to [Owen Melbourne](https://github.com/OwenMelbz);
+- grouped and inline errors - thanks to [Owen Melbourne](https://github.com/OwenMelbz);
+- developers can now choose custom views per CRUD panel - thanks to [Owen Melbourne](https://github.com/OwenMelbz);
+- select2_ajax and select2_ajax_multiple field types - thanks to [maesklaas](https://github.com/maesklaas);
+
+### Fixed
+- excluded _method from massAssignment, so create/update errors will be more useful;
+
+## [3.1.60] - 2017-02-13
+
+### Fixed
+- select2_ajax and select2_ajax_multiple field types have been renamed to select2_from_ajax and select2_from_ajax_multiple for field naming consistency;
+
+
+## [3.1.59] - 2017-02-13
+
+### Added
+- date_range field, thanks to [Owen Melbourne](https://github.com/OwenMelbz);
+- select2_ajax and select2_ajax_multiple field types - thanks to [maesklaas](https://github.com/maesklaas);
+
+### Fixed
+- change the way the CrudPanel class is injected, so it can be overwritten more easily;
+- simpleMDE field type - full screen fixed;
+
+
+## [3.1.58] - 2017-02-10
+
+### Added
+- Bulgarian translation, thanks to [Petyo Tsonev](https://github.com/petyots);
+- select2_from_array, thanks to [Nick Barrett](https://github.com/njbarrett);
+
+### Fixed
+- DateTime Picker error when date deleted after being set - fixes #386;
+- Abstracted primary key in select_multiple column - fixes #377 and #412;
+- AutoSet methods now using the connection on the model, instead of the default connection; This should allow for CRUDs from multiple databases inside one app; Big thanks to [Hamid Alaei Varnosfaderani](https://github.com/halaei) for this PR;
+- Check that the Fake field is included in the request before trying to use it;
+
+
+## [3.1.57] - 2017-02-03
+
+### Added
+- Laravel 5.4 compatibility;
+
+### Fixed
+- elfinder redirected to /login instead of /admin, because it used the "auth" middleware instead of "admin";
+
+
+## [3.1.56] - 2017-02-03
+
+### Fixed
+- deleting a CRUD entry showed a warning;
+
+
+## [3.1.55] - 2017-02-02
+
+### Fixed
+- allow custom primary key in field types base64_image and checklist_dependency;
+- dropdown filter triggered separator on 0 index;
+- make sure model events are triggered when deleting;
+- in edit view, use the fields variable passed to the view;
+- fix conflict bootstrap-datepicker & jquery-ui;
+- fix "undefined index: disk" in upload field type;
+
+## [3.1.54] - 2017-01-19
+
+### Fixed
+- revisions;
+
+
+## [3.1.53] - 2017-01-20
+
+### Fixed
+- Revisions: $this->update() removed many to many relations;
+
+
+## [3.1.52] - 2017-01-18
+
+### Fixed
+- revisions are sorted by key, not by date, since they keys are auto-incremented anyway; this should allow for multidimensional arrays;
+
+
+## [3.1.51] - 2017-01-11
+
+### Fixed
+- revisions work when there are hidden (fake) fields present;
+- the table in list view is responsive (scrollable horizontally) by default;
+- new syntax for details_row URL in javascript;
+- new syntax for the current URL in layout.blade.php, for making the current menu items active;
+
+## [3.1.50] - 2017-01-08
+
+### Added
+- Chinese (Traditional) translation, thanks to [Isaac Kwan](https://github.com/isaackwan);
+- You can now create a CRUD field to overwrite the primary key, thanks to [Isaac Kwan](https://github.com/isaackwan);
+
+### Fixed
+- Escaped table name for ENUM column types, so reserved PHP/MySQL names can also be used for table names; Fixes #261;
+- CrudTrait's isColumnNullable() should now work for multiple-database systems, by getting the connection type automatically;
+- Can use DB prefixed tables in CrudTrait's isColumnNullable(); fixes #300;
+- Radio field type could not be used inside Settings; Now it can;
+
+
+## [3.1.49] - 2017-01-08
+
+### Fixed
+- select_from_array field triggered an "Undefined index: value" error; fixes #312 thanks to [Chris Thompson](https://christhompsontldr.com/);
+
+
+## [3.1.48] - 2016-12-14
+
+### Fixed
+- Prevent double-json-encoding on complicated field types, when using attribute casting; Fixes #259;
+
+
+## [3.1.47] - 2016-12-14
+
+### Fixed
+- Don't mutate date/datetime if they are empty. It will default to now;
+- select_from_array has a new option: "allows_multiple";
+- syncPivot is now done before saving the main entity in Update::edit();
+- added beforeColumn(), afterColumn(), beforeField() and afterField() methods to more easily reorder fields and columns - big up to [Ben Sutter](https://github.com/b8ne) for this feature;
+
+
+## [3.1.46] - 2016-12-13
+
+### Fixed
+- a filter will be triggered if the variable exists, wether it's null or not;
+- if the elfinder route has not been registered, it will be by the CrudServiceProvider;
+
+
 ## [3.1.45] - 2016-12-02
 
 ### Added
@@ -47,6 +311,7 @@ All Notable changes to `Backpack CRUD` will be documented in this file
 
 ### Fixed
 - n-n filters prevented CRUD items from being added;
+
 
 ## [3.1.41] - 2016-11-11
 

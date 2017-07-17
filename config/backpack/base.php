@@ -12,20 +12,20 @@ return [
     */
 
     // Project name. Shown in the breadcrumbs and a few other places.
-    'project_name' => 'Travelin',
+    'project_name' => 'Backpack',
 
     // Menu logos
-    'logo_lg'   => '<b>Travel</b>in',
-    'logo_mini' => '<b>T</b>in',
+    'logo_lg'   => '<b>Back</b>pack',
+    'logo_mini' => '<b>B</b>p',
 
     // Developer or company name. Shown in footer.
-    'developer_name' => 'Rahdyan D Gusti',
+    'developer_name' => 'Cristian Tabacitu',
 
     // Developer website. Link in footer.
-    'developer_link' => '',
+    'developer_link' => 'http://tabacitu.ro',
 
     // Show powered by Laravel Backpack in the footer?
-    'show_powered_by' => false,
+    'show_powered_by' => true,
 
     // The AdminLTE skin. Affects menu color and primary/secondary colors used throughout the application.
     'skin' => 'skin-purple',
@@ -41,14 +41,13 @@ return [
     | Registration Open
     |--------------------------------------------------------------------------
     |
-    | Choose wether new users are allowed to register.
+    | Choose whether new users are allowed to register.
     | This will show up the Register button in the menu and allow access to the
     | Register functions in AuthController.
     |
     */
 
-    'registration_open' => false,
-
+    'registration_open' => (env('APP_ENV') == 'local') ? true : false,
 
     /*
     |--------------------------------------------------------------------------

@@ -60,6 +60,9 @@
                             </div>
                             <a href="#" class="pull-right">Register</a>
                             <button class="btn btn-info btn-xs">Login</button>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <a href="{{ route('social.redirect', ['provider' => 'google']) }}" class="btn btn-lg waves-effect waves-light btn-block google">Google+</a>
+                            </div>
                         </div>
                         </form>
 

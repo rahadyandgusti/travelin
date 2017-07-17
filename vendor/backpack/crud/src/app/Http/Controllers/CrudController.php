@@ -2,24 +2,25 @@
 
 namespace Backpack\CRUD\app\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Form as Form;
+use Backpack\CRUD\CrudPanel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Form as Form;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Backpack\CRUD\app\Http\Controllers\CrudFeatures\Reorder;
+use Backpack\CRUD\app\Http\Controllers\CrudFeatures\AjaxTable;
+// CRUD Traits for non-core features
+use Backpack\CRUD\app\Http\Controllers\CrudFeatures\Revisions;
+use Backpack\CRUD\app\Http\Controllers\CrudFeatures\SaveActions;
 use Backpack\CRUD\app\Http\Requests\CrudRequest as StoreRequest;
 use Backpack\CRUD\app\Http\Requests\CrudRequest as UpdateRequest;
-use Backpack\CRUD\CrudPanel;
-// CRUD Traits for non-core features
-use Backpack\CRUD\app\Http\Controllers\CrudFeatures\AjaxTable;
-use Backpack\CRUD\app\Http\Controllers\CrudFeatures\Reorder;
-use Backpack\CRUD\app\Http\Controllers\CrudFeatures\Revisions;
 use Backpack\CRUD\app\Http\Controllers\CrudFeatures\ShowDetailsRow;
 
 class CrudController extends BaseController
 {
     use DispatchesJobs, ValidatesRequests;
-    use AjaxTable, Reorder, Revisions, ShowDetailsRow;
+    use AjaxTable, Reorder, Revisions, ShowDetailsRow, SaveActions;
 
     public $data = [];
     public $crud;
@@ -28,7 +29,7 @@ class CrudController extends BaseController
     public function __construct()
     {
         if (! $this->crud) {
-            $this->crud = new CrudPanel();
+            $this->crud = app()->make(CrudPanel::class);
 
             // call the setup function inside this closure to also have the request there
             // this way, developers can use things stored in session (auth variables, etc)
@@ -67,8 +68,7 @@ class CrudController extends BaseController
         }
 
         // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
-        // $this->crud->getListView() returns 'list' by default, or 'list_ajax' if ajax was enabled
-        return view('crud::list', $this->data);
+        return view($this->crud->getListView(), $this->data);
     }
 
     /**
@@ -82,11 +82,12 @@ class CrudController extends BaseController
 
         // prepare the fields you need to show
         $this->data['crud'] = $this->crud;
+        $this->data['saveAction'] = $this->getSaveAction();
         $this->data['fields'] = $this->crud->getCreateFields();
         $this->data['title'] = trans('backpack::crud.add').' '.$this->crud->entity_name;
 
         // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
-        return view('crud::create', $this->data);
+        return view($this->crud->getCreateView(), $this->data);
     }
 
     /**
@@ -113,20 +114,16 @@ class CrudController extends BaseController
         }
 
         // insert item in the db
-        $item = $this->crud->create($request->except(['redirect_after_save', '_token']));
+        $item = $this->crud->create($request->except(['save_action', '_token', '_method']));
         $this->data['entry'] = $this->crud->entry = $item;
 
         // show a success message
         \Alert::success(trans('backpack::crud.insert_success'))->flash();
 
-        // redirect the user where he chose to be redirected
-        switch ($request->input('redirect_after_save')) {
-            case 'current_item_edit':
-                return \Redirect::to($this->crud->route.'/'.$item->getKey().'/edit');
+        // save the redirect choice for next time
+        $this->setSaveAction();
 
-            default:
-                return \Redirect::to($request->input('redirect_after_save'));
-        }
+        return $this->performSaveAction($item->getKey());
     }
 
     /**
@@ -143,13 +140,14 @@ class CrudController extends BaseController
         // get the info for that entry
         $this->data['entry'] = $this->crud->getEntry($id);
         $this->data['crud'] = $this->crud;
+        $this->data['saveAction'] = $this->getSaveAction();
         $this->data['fields'] = $this->crud->getUpdateFields($id);
         $this->data['title'] = trans('backpack::crud.edit').' '.$this->crud->entity_name;
 
         $this->data['id'] = $id;
 
         // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
-        return view('crud::edit', $this->data);
+        return view($this->crud->getEditView(), $this->data);
     }
 
     /**
@@ -177,13 +175,16 @@ class CrudController extends BaseController
 
         // update the row in the db
         $item = $this->crud->update($request->get($this->crud->model->getKeyName()),
-                            $request->except('redirect_after_save', '_token'));
+                            $request->except('save_action', '_token', '_method'));
         $this->data['entry'] = $this->crud->entry = $item;
 
         // show a success message
         \Alert::success(trans('backpack::crud.update_success'))->flash();
 
-        return \Redirect::to($this->crud->route);
+        // save the redirect choice for next time
+        $this->setSaveAction();
+
+        return $this->performSaveAction($item->getKey());
     }
 
     /**
@@ -203,7 +204,7 @@ class CrudController extends BaseController
         $this->data['title'] = trans('backpack::crud.preview').' '.$this->crud->entity_name;
 
         // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
-        return view('crud::show', $this->data);
+        return view($this->crud->getShowView(), $this->data);
     }
 
     /**

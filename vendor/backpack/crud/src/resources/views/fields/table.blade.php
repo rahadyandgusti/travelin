@@ -3,18 +3,16 @@
 <?php
     $max = isset($field['max']) && (int) $field['max'] > 0 ? $field['max'] : -1;
     $min = isset($field['min']) && (int) $field['min'] > 0 ? $field['min'] : -1;
-    $item_name = strtolower( isset($field['entity_singular']) && !empty($field['entity_singular']) ? $field['entity_singular'] : $field['label']);
+    $item_name = strtolower(isset($field['entity_singular']) && !empty($field['entity_singular']) ? $field['entity_singular'] : $field['label']);
 
     $items = old($field['name']) ? (old($field['name'])) : (isset($field['value']) ? ($field['value']) : (isset($field['default']) ? ($field['default']) : '' ));
 
     // make sure not matter the attribute casting
     // the $items variable contains a properly defined JSON
-    if(is_array($items)) {
+    if (is_array($items)) {
         if (count($items)) {
             $items = json_encode($items);
-        }
-        else
-        {
+        } else {
             $items = '[]';
         }
     } elseif (is_string($items) && !is_array(json_decode($items))) {
@@ -25,6 +23,7 @@
 <div ng-app="backPackTableApp" ng-controller="tableController" @include('crud::inc.field_wrapper_attributes') >
 
     <label>{!! $field['label'] !!}</label>
+    @include('crud::inc.field_translatable_icon')
 
     <input class="array-json" type="hidden" id="{{ $field['name'] }}" name="{{ $field['name'] }}">
 
@@ -67,7 +66,7 @@
         </table>
 
         <div class="array-controls btn-group m-t-10">
-            <button ng-if="max == -1 || items.length < max" class="btn btn-sm btn-default" type="button" ng-click="addItem()"><i class="fa fa-plus"></i> Add {{ $item_name }}</button>
+            <button ng-if="max == -1 || items.length < max" class="btn btn-sm btn-default" type="button" ng-click="addItem()"><i class="fa fa-plus"></i> {{trans('backpack::crud.add')}} {{ $item_name }}</button>
         </div>
 
     </div>

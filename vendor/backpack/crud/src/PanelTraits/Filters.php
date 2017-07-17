@@ -2,17 +2,33 @@
 
 namespace Backpack\CRUD\PanelTraits;
 
-use Illuminate\Http\Request;
-
 trait Filters
 {
-    // ------------
-    // FILTERS
-    // ------------
-
     public $filters = [];
 
-    public function __construct()
+    public function filtersEnabled()
+    {
+        return ! is_array($this->filters);
+    }
+
+    public function filtersDisabled()
+    {
+        return is_array($this->filters);
+    }
+
+    public function enableFilters()
+    {
+        if ($this->filtersDisabled()) {
+            $this->filters = new FiltersCollection;
+        }
+    }
+
+    public function disableFilters()
+    {
+        $this->filters = [];
+    }
+
+    public function clearFilters()
     {
         $this->filters = new FiltersCollection;
     }
@@ -32,6 +48,9 @@ trait Filters
             $values = $values();
         }
 
+        // enable the filters functionality
+        $this->enableFilters();
+
         // check if another filter with the same name exists
         if (! isset($options['name'])) {
             abort(500, 'All your filters need names.');
@@ -46,9 +65,7 @@ trait Filters
 
         // if a closure was passed as "filter_logic"
         if ($this->doingListOperation() &&
-            $this->request->input($options['name']) &&
-            $this->request->input($options['name']) != null &&
-            $this->request->input($options['name']) != 'null') {
+            $this->request->has($options['name'])) {
             if (is_callable($filter_logic)) {
                 // apply it
                 $filter_logic($this->request->input($options['name']));
@@ -192,7 +209,7 @@ class CrudFilter
         $this->options = $options;
         $this->view = 'crud::filters.'.$this->type;
 
-        if (\Request::input($this->name)) {
+        if (\Request::has($this->name)) {
             $this->currentValue = \Request::input($this->name);
         }
     }
@@ -215,7 +232,7 @@ class CrudFilter
 
     public function isActive()
     {
-        if (\Request::input($this->name)) {
+        if (\Request::has($this->name)) {
             return true;
         }
 

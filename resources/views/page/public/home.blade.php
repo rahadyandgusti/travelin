@@ -6,7 +6,7 @@
             <div id="slideshow" class="owl-carousel owl-theme">
                 @foreach($slides as $slide)
                 <div class="item">
-                    <img class="lazyOwl" data-src="{{\GlobalHelper::getImage($slide->slide,'uploads/slide/city/')}}" alt="Lazy Owl Image">
+                    <img class="lazyOwl" src="{{\GlobalHelper::getImage($slide->slide,'uploads/slide/city/')}}" alt="Lazy Owl Image">
                     <a href="{{url('search?city='.$slide->id)}}">
                         <label class="title margin-left padding">
                             <span class="title-info">{{ucfirst($slide->name)}}</span>
@@ -170,14 +170,14 @@
             </div>
         </div>
     </div>
-
 @endsection
+
 
 @push('callHead')
     <!-- owl-carousel -->
-    <link href="{!! asset('assets/dist/plugins/owl-carousel/owl.carousel.css') !!}" rel="stylesheet">
-    <link href="{!! asset('assets/dist/plugins/owl-carousel/owl.theme.css') !!}" rel="stylesheet">
-    <link href="{!! asset('assets/dist/plugins/owl-carousel/owl.transitions.css') !!}" rel="stylesheet">
+    <link href="{!! asset('assets/dist/plugins/owl-carousel/assets/owl.carousel.css') !!}" rel="stylesheet">
+    <link href="{!! asset('assets/dist/plugins/owl-carousel/assets/owl.theme.default.css') !!}" rel="stylesheet">
+    <!-- <link href="{!! asset('assets/dist/plugins/owl-carousel/owl.transitions.css') !!}" rel="stylesheet"> -->
     <style type="text/css">
     .item img{
         display: block;
@@ -216,10 +216,15 @@
             var owl = $("#slideshow");
             owl.owlCarousel({
                 navigationText : false,
-                singleItem : true,
-                transitionStyle : "fadeUp",
+                // singleItem : true,
+                items:1,
+                // transitionStyle : "fadeUp",
+                animateOut: 'slideOutDown',
+                animateIn: 'flipInX',
                 autoPlay:true,
                 lazyLoad : true,
+                nav:false,
+                dots:false
             });
         })
     </script>

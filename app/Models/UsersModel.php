@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class UsersModel extends Model
+// class UsersModel extends Model
+class UsersModel extends Authenticatable
 {
-	use SoftDeletes;
+	use Notifiable;
 
     protected $table = 'users';
 
@@ -15,5 +18,10 @@ class UsersModel extends Model
 
 	protected $primaryKey = "id";
 
-	protected $dates = ['deleted_at'];
+	public function social()
+    {
+        return $this->hasMany('App\Models\SocialModel','user_id','id');
+    }
+
+	// protected $dates = ['deleted_at'];
 }

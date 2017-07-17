@@ -111,7 +111,7 @@
 
     <footer class="footer">
         <span class="text-center">
-            Developed with &hearts; by <a href="http://tlab.co.id">T'lab</a> &copy; 2016  
+            Developed with &hearts; by <a href="">rahadyan</a> &copy; 2016  
         </span>
     </footer>
     

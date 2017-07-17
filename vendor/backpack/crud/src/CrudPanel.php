@@ -2,26 +2,29 @@
 
 namespace Backpack\CRUD;
 
+use Backpack\CRUD\PanelTraits\Read;
+use Backpack\CRUD\PanelTraits\Tabs;
+use Backpack\CRUD\PanelTraits\Query;
+use Backpack\CRUD\PanelTraits\Views;
 use Backpack\CRUD\PanelTraits\Access;
+use Backpack\CRUD\PanelTraits\Create;
+use Backpack\CRUD\PanelTraits\Delete;
+use Backpack\CRUD\PanelTraits\Errors;
+use Backpack\CRUD\PanelTraits\Fields;
+use Backpack\CRUD\PanelTraits\Update;
 use Backpack\CRUD\PanelTraits\AutoSet;
 use Backpack\CRUD\PanelTraits\Buttons;
 use Backpack\CRUD\PanelTraits\Columns;
-use Backpack\CRUD\PanelTraits\Create;
-use Backpack\CRUD\PanelTraits\Delete;
-use Backpack\CRUD\PanelTraits\FakeColumns;
-use Backpack\CRUD\PanelTraits\FakeFields;
-use Backpack\CRUD\PanelTraits\Fields;
-use Backpack\CRUD\PanelTraits\Query;
-use Backpack\CRUD\PanelTraits\Read;
-use Backpack\CRUD\PanelTraits\Reorder;
-use Backpack\CRUD\PanelTraits\Update;
-use Backpack\CRUD\PanelTraits\ViewsAndRestoresRevisions;
-use Backpack\CRUD\PanelTraits\AutoFocus;
 use Backpack\CRUD\PanelTraits\Filters;
+use Backpack\CRUD\PanelTraits\Reorder;
+use Backpack\CRUD\PanelTraits\AutoFocus;
+use Backpack\CRUD\PanelTraits\FakeFields;
+use Backpack\CRUD\PanelTraits\FakeColumns;
+use Backpack\CRUD\PanelTraits\ViewsAndRestoresRevisions;
 
 class CrudPanel
 {
-    use Create, Read, Update, Delete, Reorder, Access, Columns, Fields, Query, Buttons, AutoSet, FakeFields, FakeColumns, ViewsAndRestoresRevisions, AutoFocus, Filters;
+    use Create, Read, Update, Delete, Errors, Reorder, Access, Columns, Fields, Query, Buttons, AutoSet, FakeFields, FakeColumns, ViewsAndRestoresRevisions, AutoFocus, Filters, Tabs, Views;
 
     // --------------
     // CRUD variables
@@ -63,6 +66,12 @@ class CrudPanel
 
     // The following methods are used in CrudController or your EntityCrudController to manipulate the variables above.
 
+    public function __construct()
+    {
+        $this->setErrorDefaults();
+        $this->initButtons();
+    }
+
     // ------------------------------------------------------
     // BASICS - model, route, entity_name, entity_name_plural
     // ------------------------------------------------------
@@ -103,7 +112,6 @@ class CrudPanel
     public function setRoute($route)
     {
         $this->route = $route;
-        $this->initButtons();
     }
 
     /**

@@ -31,6 +31,7 @@ class WisataController extends CrudController
                         'model' => "App\Models\CitiesModel" 
                     ]);
         $this->crud->addColumn([
+            'name' => 'image',
             'label' => "Logo", // Table column heading
             'type' => "model_function",
             'function_name' => 'getImage'
@@ -54,7 +55,7 @@ class WisataController extends CrudController
 	    $this->crud->addField([ // image
                         'label' => "Image",
                         'name' => "image",
-                        'type' => 'image_cropped',
+                        'type' => 'image',
                         'upload' => true,
                         'crop' => true, // set to true to allow cropping, false to disable
                         'aspect_ratio' => (633/400), // ommit or set to 0 to allow any aspect ratio
@@ -86,20 +87,16 @@ class WisataController extends CrudController
         $request['image'] = $this->crud->model->uploadImage($request->image);
 
         // insert item in the db
-        $item = $this->crud->create($request->except(['redirect_after_save', '_token']));
+        $item = $this->crud->create($request->except(['save_action', '_token', '_method']));
         $this->data['entry'] = $this->crud->entry = $item;
 
         // show a success message
         \Alert::success(trans('backpack::crud.insert_success'))->flash();
 
         // redirect the user where he chose to be redirected
-        switch ($request->input('redirect_after_save')) {
-            case 'current_item_edit':
-                return \Redirect::to($this->crud->route.'/'.$item->getKey().'/edit');
+        $this->setSaveAction();
 
-            default:
-                return \Redirect::to($request->input('redirect_after_save'));
-        }
+        return $this->performSaveAction($item->getKey());
     }
 
     public function edit($id)

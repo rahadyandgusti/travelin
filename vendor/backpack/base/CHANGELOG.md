@@ -22,6 +22,100 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Nothing
 
 
+## [0.7.20] - 2017-07-06
+
+## Added
+- overwritable routes file;
+- Portugese translation (thanks to [Toni Almeida](https://github.com/promatik));
+- Remember collapsed/open sidebar state, when loading the page (thanks to [MarcosBL](https://github.com/MarcosBL));
+
+### Fixed
+- Support query string when setting active menu item;
+
+
+## [0.7.19] - 2017-04-25
+
+### Added
+- Latvian translation files (thanks to [Erik Bonder](https://github.com/erik-ropez));
+- Russian translation files (thanks to [Aleksei Budaev](https://a-budaev.ru/));
+
+
+## [0.7.18] - 2017-04-21
+
+### Fixed
+- language files for all Backpack packages are now loaded by Backpack\Base, using pointer files; this fixes the language fallback system;
+- Backpack\Base language files no longer need publishing;
+
+
+## [0.7.17] - 2017-04-21
+
+### Added
+- Indonesian translation, thanks to [Nakamura Agatha](https://github.com/nakamuraagatha);
+- deep links to tabs, thanks to [MarcosBL](https://github.com/MarcosBL);
+
+
+## [0.7.16] - 2017-02-11
+
+### Added
+- Bulgarian translation, thanks to [Petyo Tsonev](https://github.com/petyots);
+- Greek translation fixes;
+
+
+## [0.7.15] - 2017-02-03
+
+### Added
+- Laravel 5.4 compatibility;
+
+
+
+## [0.7.14] - 2017-01-08
+
+### Fixed
+- Collapsed sidebar alignment issue; Fixes #77;
+
+
+
+## [0.7.13] - 2017-01-08
+
+### Fixed
+- Developers can now change the "users" table name without changing anything else (other than the table used on the User model); fixes #70;
+
+
+## [0.7.12] - 2017-01-08
+
+### Added
+- Dutch translation, thanks to [Stan Daniëls](https://github.com/standaniels);
+
+### Fixed
+- Auth routes can now be easily overwritten, wether the admin prefix was specified or not, thanks to [Pavol Tanuška](https://github.com/pavoltanuska);
+- Sidebar user placeholder image now works for non-utf-8-character names too, thanks to [ozeranskiy](https://github.com/ozeranskiy);
+
+
+## [0.7.11] - 2016-12-21
+
+### Fixed
+- only load the generators if the classes exist;
+
+
+## [0.7.10] - 2016-12-21
+
+### Added
+- laracasts/generators require-dev dependency;
+
+
+## [0.7.9] - 2016-12-21
+
+### Added
+- backpack/generators require-dev dependency;
+
+
+## [0.7.8] - 2016-12-13
+
+### Added
+- Greek translation file, thanks to [Stamatis Katsaounis](https://github.com/skatsaounis);
+- German translation file, thanks to [Thomas aka tricki](https://github.com/tricki);
+
+
 ## [0.7.7] - 2016-12-02
 
 ### Fixed

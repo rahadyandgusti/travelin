@@ -3,11 +3,14 @@
     "description": "Laravel Scout provides a driver based solution to searching your Eloquent models.",
     "keywords": [
         "algolia",
-        "elasticsearch",
         "laravel",
         "search"
     ],
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/laravel/scout/issues",
+        "source": "https://github.com/laravel/scout"
+    },
     "authors": [
         {
             "name": "Taylor Otwell",
@@ -16,12 +19,12 @@
     ],
     "require": {
         "php": ">=5.6.4",
-        "illuminate/bus": "~5.3",
-        "illuminate/contracts": "~5.3",
-        "illuminate/database": "~5.3",
-        "illuminate/pagination": "~5.3",
-        "illuminate/queue": "~5.3",
-        "illuminate/support": "~5.3"
+        "illuminate/bus": "~5.4",
+        "illuminate/contracts": "~5.4",
+        "illuminate/database": "~5.4",
+        "illuminate/pagination": "~5.4",
+        "illuminate/queue": "~5.4",
+        "illuminate/support": "~5.4"
     },
     "require-dev": {
         "algolia/algoliasearch-client-php": "^1.10",
@@ -40,12 +43,19 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "3.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Laravel\\Scout\\ScoutServiceProvider"
+            ]
         }
     },
     "suggest": {
-        "algolia/algoliasearch-client-php": "Required to use the Algolia engine (^1.10).",
-        "elasticsearch/elasticsearch": "Required to use the Elasticsearch engine (^2.2)."
+        "algolia/algoliasearch-client-php": "Required to use the Algolia engine (^1.10)."
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true

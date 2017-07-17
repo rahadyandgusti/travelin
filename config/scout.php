@@ -11,7 +11,7 @@ return [
     | using Laravel Scout. This connection is used when syncing all models
     | to the search service. You should adjust this based on your needs.
     |
-    | Supported: "algolia", "elasticsearch", "null"
+    | Supported: "algolia", "null"
     |
     */
 
@@ -41,7 +41,23 @@ return [
     |
     */
 
-    'queue' => false,
+    'queue' => env('SCOUT_QUEUE', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Chuck Sizes
+    |--------------------------------------------------------------------------
+    |
+    | These options allow you to control the maximum chunk size when you are
+    | mass importing data into the search engine. This allows you to fine
+    | tune these chunk sizes based on the capabilites of your machines.
+    |
+    */
+
+    'chunk' => [
+        'searchable' => 500,
+        'unsearchable' => 500,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -59,25 +75,13 @@ return [
         'secret' => env('ALGOLIA_SECRET', ''),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Elasticsearch Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for Elasticsearch, which is a
-    | distributed, open source search and analytics engine. Feel free
-    | to add as many Elasticsearch servers as required by your app.
-    |
-    */
-
-    'elasticsearch' => [
-        'index' => env('ELASTICSEARCH_INDEX', 'laravel'),
-
-        'config' => [
-            'hosts' => [
-                env('ELASTICSEARCH_HOST', 'localhost'),
-            ],
-        ],
-    ],
+    'mysql' => [
+        'mode' => 'NATURAL_LANGUAGE',
+        'model_directories' => [app_path()],
+        'min_search_length' => 0,
+        'min_fulltext_search_length' => 4,
+        'min_fulltext_search_fallback' => 'LIKE',
+        'query_expansion' => false
+    ]
 
 ];

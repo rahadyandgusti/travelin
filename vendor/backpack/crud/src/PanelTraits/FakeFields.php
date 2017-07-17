@@ -14,25 +14,17 @@ trait FakeFields
      *
      * @return array
      */
-    public function compactFakeFields($request, $form = 'create')
+    public function compactFakeFields($request, $form = 'create', $id = false)
     {
         $fake_field_columns_to_encode = [];
 
         // get the right fields according to the form type (create/update)
-        switch (strtolower($form)) {
-            case 'update':
-                $fields = $this->update_fields;
-                break;
-
-            default:
-                $fields = $this->create_fields;
-                break;
-        }
+        $fields = $this->getFields($form, $id);
 
         // go through each defined field
         foreach ($fields as $k => $field) {
-            // if it's a fake field
-            if (isset($fields[$k]['fake']) && $fields[$k]['fake'] == true) {
+            // if it's a fake field and the field is included in the request
+            if (isset($fields[$k]['fake']) && $fields[$k]['fake'] == true && isset($request[$fields[$k]['name']])) {
                 // add it to the request in its appropriate variable - the one defined, if defined
                 if (isset($fields[$k]['store_in'])) {
                     $request[$fields[$k]['store_in']][$fields[$k]['name']] = $request[$fields[$k]['name']];
@@ -61,7 +53,12 @@ trait FakeFields
         // json_encode all fake_value columns in the database, so they can be properly stored and interpreted
         if (count($fake_field_columns_to_encode)) {
             foreach ($fake_field_columns_to_encode as $key => $value) {
-                $request[$value] = json_encode($request[$value]);
+                if (property_exists($this->model, 'translatable') && in_array($value, $this->model->getTranslatableAttributes(), true)) {
+                    // don't json_encode spatie/translatable fake columns
+                    $request[$value] = $request[$value];
+                } else {
+                    $request[$value] = json_encode($request[$value]);
+                }
             }
         }
 
