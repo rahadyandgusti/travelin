@@ -10,9 +10,13 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <link rel="stylesheet" href="{{ asset('/plugins/bootstrap/css/bootstrap.min.css') }} ">
+    <link rel="stylesheet" href="{{ asset('/plugins/font-awesome/css/font-awesome.min.css') }} ">
+
+    @yield('style')
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -37,7 +41,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{ route('province.index') }}">Province</a></li>
+                        <li><a href="{{ route('city.index') }}">City</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -45,7 +50,6 @@
                         <!-- Authentication Links -->
                         @if (!Auth::guard('admin')->check())
                             <li><a href="{{ URL::to('admin') }}">Login</a></li>
-                            <li><a href="{{ URL::to('admin/register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -75,8 +79,13 @@
         @yield('content')
     </div>
 
-    <!-- Scripts -->
+    <script src="{!!url('')!!}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+    <script src="{!!url('')!!}/plugins/bootstrap/js/bootstrap.min.js"></script>
+
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    @yield('scripts')
+    <!-- Scripts -->
+
 </body>
 </html>

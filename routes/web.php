@@ -26,4 +26,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::get('register', 'Auth\RegisterController@showRegistrationForm');
     Route::post('register', 'Auth\RegisterController@register')->name('admin.register');
     Route::get('home', 'HomeController@index');
+
+    Route::resource('province', 'ProvincesController', ['except' => ['show']]);
+    Route::resource('city', 'CitiesController', ['except' => ['show']]);
 });

@@ -15,12 +15,20 @@
         "illuminate/validation": "5.*@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "orchestra/testbench": "~3.0"
+        "phpunit/phpunit": "~5.0",
+        "orchestra/testbench": "~3.4"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6.x-dev"
+            "dev-master": "1.12.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Kris\\LaravelFormBuilder\\FormBuilderServiceProvider"
+            ],
+            "aliases": {
+                "FormBuilder": "Kris\\LaravelFormBuilder\\Facades\\FormBuilder"
+            }
         }
     },
     "autoload": {

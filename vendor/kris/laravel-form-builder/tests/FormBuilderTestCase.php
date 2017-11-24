@@ -2,12 +2,12 @@
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Validation\Factory;
-use Illuminate\Contracts\Validation\Validator;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Kris\LaravelFormBuilder\FormHelper;
 use Kris\LaravelFormBuilder\Form;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Database\Eloquent\Model;
+use Kris\LaravelFormBuilder\Filters\FilterResolver;
 
 class TestModel extends Model {
     protected $fillable = ['m', 'f'];
@@ -70,6 +70,11 @@ abstract class FormBuilderTestCase extends TestCase {
      */
     protected $plainForm;
 
+    /**
+     * @var FilterResolver $filtersResolver
+     */
+    protected $filtersResolver;
+
     public function setUp()
     {
         parent::setUp();
@@ -77,7 +82,7 @@ abstract class FormBuilderTestCase extends TestCase {
         $this->view = $this->app['view'];
         $this->translator = $this->app['translator'];
         $this->request = $this->app['request'];
-        $this->request->setSession($this->app['session.store']);
+        $this->request->setLaravelSession($this->app['session.store']);
         $this->validatorFactory = $this->app['validator'];
         $this->eventDispatcher = $this->app['events'];
         $this->model = new TestModel();
@@ -87,6 +92,8 @@ abstract class FormBuilderTestCase extends TestCase {
         $this->formBuilder = new FormBuilder($this->app, $this->formHelper, $this->eventDispatcher);
 
         $this->plainForm = $this->formBuilder->plain();
+
+        $this->filtersResolver = new FilterResolver();
     }
 
     public function tearDown()
@@ -99,6 +106,7 @@ abstract class FormBuilderTestCase extends TestCase {
         $this->formHelper = null;
         $this->formBuilder = null;
         $this->plainForm = null;
+        $this->filtersResolver = null;
     }
 
     protected function getDefaults($attr = [], $label = '', $defaultValue = null, $helpText = null)

@@ -2,11 +2,11 @@
 
 namespace Kris\LaravelFormBuilder\Fields;
 
+use Kris\LaravelFormBuilder\Filters\Exception\FilterAlreadyBindedException;
+use Kris\LaravelFormBuilder\Filters\FilterInterface;
+use Kris\LaravelFormBuilder\Filters\FilterResolver;
 use Kris\LaravelFormBuilder\Form;
-use Illuminate\Database\Eloquent\Model;
 use Kris\LaravelFormBuilder\FormHelper;
-use Kris\LaravelFormBuilder\RulesParser;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class FormField
@@ -16,28 +16,28 @@ use Illuminate\Database\Eloquent\Collection;
 abstract class FormField
 {
     /**
-     * Name of the field
+     * Name of the field.
      *
-     * @var
+     * @var string
      */
     protected $name;
 
     /**
-     * Type of the field
+     * Type of the field.
      *
-     * @var
+     * @var string
      */
     protected $type;
 
     /**
-     * All options for the field
+     * All options for the field.
      *
-     * @var
+     * @var array
      */
     protected $options = [];
 
     /**
-     * Is field rendered
+     * Is field rendered.
      *
      * @var bool
      */
@@ -59,14 +59,14 @@ abstract class FormField
     protected $formHelper;
 
     /**
-     * Name of the property for value setting
+     * Name of the property for value setting.
      *
      * @var string
      */
     protected $valueProperty = 'value';
 
     /**
-     * Name of the property for default value
+     * Name of the property for default value.
      *
      * @var string
      */
@@ -74,7 +74,8 @@ abstract class FormField
 
     /**
      * Is default value set?
-     * @var bool
+     *
+     * @var bool|false
      */
     protected $hasDefault = false;
 
@@ -84,10 +85,31 @@ abstract class FormField
     protected $valueClosure = null;
 
     /**
-     * @param             $name
-     * @param             $type
-     * @param Form        $parent
-     * @param array       $options
+     * Array of filters key(alias/name) => objects.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
+     * Raw/unfiltered field value.
+     *
+     * @var mixed $rawValues
+     */
+    protected $rawValue;
+
+    /**
+     * Override filters with same alias/name for field.
+     *
+     * @var bool
+     */
+    protected $filtersOverride = false;
+
+    /**
+     * @param string $name
+     * @param string $type
+     * @param Form $parent
+     * @param array $options
      */
     public function __construct($name, $type, Form $parent, array $options = [])
     {
@@ -98,8 +120,15 @@ abstract class FormField
         $this->setTemplate();
         $this->setDefaultOptions($options);
         $this->setupValue();
+        $this->initFilters();
     }
 
+
+    /**
+     * Setup the value of the form field.
+     *
+     * @return void
+     */
     protected function setupValue()
     {
         $value = $this->getOption($this->valueProperty);
@@ -117,7 +146,7 @@ abstract class FormField
     }
 
     /**
-     * Get the template, can be config variable or view path
+     * Get the template, can be config variable or view path.
      *
      * @return string
      */
@@ -132,6 +161,8 @@ abstract class FormField
     }
 
     /**
+     * Render the field.
+     *
      * @param array $options
      * @param bool  $showLabel
      * @param bool  $showField
@@ -187,7 +218,7 @@ abstract class FormField
     }
 
     /**
-     * Get the attribute value from the model by name
+     * Get the attribute value from the model by name.
      *
      * @param mixed $model
      * @param string $name
@@ -206,9 +237,9 @@ abstract class FormField
     }
 
     /**
-     * Transform array like syntax to dot syntax
+     * Transform array like syntax to dot syntax.
      *
-     * @param $key
+     * @param string $key
      * @return mixed
      */
     protected function transformKey($key)
@@ -217,7 +248,7 @@ abstract class FormField
     }
 
     /**
-     * Prepare options for rendering
+     * Prepare options for rendering.
      *
      * @param array $options
      * @return array
@@ -225,7 +256,7 @@ abstract class FormField
     protected function prepareOptions(array $options = [])
     {
         $helper = $this->formHelper;
-        $rulesParser = new RulesParser($this);
+        $rulesParser = $helper->createRulesParser($this);
         $rules = $this->getOption('rules');
         $parsedRules = $rules ? $rulesParser->parse($rules) : [];
 
@@ -264,20 +295,16 @@ abstract class FormField
 
             if ($this->parent->clientValidationEnabled()) {
                 $this->setOption('attr.required', 'required');
-
-                if ($parsedRules) {
-                    $attrs = $this->getOption('attr') + $parsedRules;
-                    $this->setOption('attr', $attrs);
-                }
             }
+        }
+
+        if ($this->parent->clientValidationEnabled() && $parsedRules) {
+            $attrs = $this->getOption('attr') + $parsedRules;
+            $this->setOption('attr', $attrs);
         }
 
         $this->setOption('wrapperAttrs', $helper->prepareAttributes($this->getOption('wrapper')));
         $this->setOption('errorAttrs', $helper->prepareAttributes($this->getOption('errors')));
-
-        if ($this->getOption('is_child')) {
-            $this->setOption('labelAttrs', $helper->prepareAttributes($this->getOption('label_attr')));
-        }
 
         if ($this->getOption('help_block.text')) {
             $this->setOption(
@@ -290,7 +317,7 @@ abstract class FormField
     }
 
     /**
-     * Get name of the field
+     * Get name of the field.
      *
      * @return string
      */
@@ -300,7 +327,7 @@ abstract class FormField
     }
 
     /**
-     * Set name of the field
+     * Set name of the field.
      *
      * @param string $name
      * @return $this
@@ -313,7 +340,7 @@ abstract class FormField
     }
 
     /**
-     * Get dot notation key for fields
+     * Get dot notation key for fields.
      *
      * @return string
      **/
@@ -323,7 +350,7 @@ abstract class FormField
     }
 
     /**
-     * Get field options
+     * Get field options.
      *
      * @return array
      */
@@ -333,11 +360,10 @@ abstract class FormField
     }
 
     /**
-     * Get single option from options array. Can be used with dot notation ('attr.class')
+     * Get single option from options array. Can be used with dot notation ('attr.class').
      *
-     * @param        $option
-     * @param mixed  $default
-     *
+     * @param string $option
+     * @param mixed|null $default
      * @return mixed
      */
     public function getOption($option, $default = null)
@@ -346,7 +372,7 @@ abstract class FormField
     }
 
     /**
-     * Set field options
+     * Set field options.
      *
      * @param array $options
      * @return $this
@@ -359,7 +385,7 @@ abstract class FormField
     }
 
     /**
-     * Set single option on the field
+     * Set single option on the field.
      *
      * @param string $name
      * @param mixed $value
@@ -373,7 +399,7 @@ abstract class FormField
     }
 
     /**
-     * Get the type of the field
+     * Get the type of the field.
      *
      * @return string
      */
@@ -383,7 +409,7 @@ abstract class FormField
     }
 
     /**
-     * Set type of the field
+     * Set type of the field.
      *
      * @param mixed $type
      * @return $this
@@ -406,7 +432,7 @@ abstract class FormField
     }
 
     /**
-     * Check if the field is rendered
+     * Check if the field is rendered.
      *
      * @return bool
      */
@@ -416,7 +442,7 @@ abstract class FormField
     }
 
     /**
-     * Default options for field
+     * Default options for field.
      *
      * @return array
      */
@@ -426,7 +452,7 @@ abstract class FormField
     }
 
     /**
-     * Defaults used across all fields
+     * Defaults used across all fields.
      *
      * @return array
      */
@@ -451,7 +477,7 @@ abstract class FormField
     }
 
     /**
-     * Get real name of the field without form namespace
+     * Get real name of the field without form namespace.
      *
      * @return string
      */
@@ -486,7 +512,9 @@ abstract class FormField
     }
 
     /**
-     * Set the template property on the object
+     * Set the template property on the object.
+     *
+     * @return void
      */
     private function setTemplate()
     {
@@ -494,7 +522,9 @@ abstract class FormField
     }
 
     /**
-     * Add error class to wrapper if validation errors exist
+     * Add error class to wrapper if validation errors exist.
+     *
+     * @return void
      */
     protected function addErrorClass()
     {
@@ -511,9 +541,8 @@ abstract class FormField
         }
     }
 
-
     /**
-     * Merge all defaults with field specific defaults and set template if passed
+     * Merge all defaults with field specific defaults and set template if passed.
      *
      * @param array $options
      */
@@ -553,6 +582,11 @@ abstract class FormField
         return $defaults;
     }
 
+    /**
+     * Setup the label for the form field.
+     *
+     * @return void
+     */
     protected function setupLabel()
     {
         if ($this->getOption('label') !== null) {
@@ -569,7 +603,7 @@ abstract class FormField
     }
 
     /**
-     * Check if fields needs label
+     * Check if fields needs label.
      *
      * @return bool
      */
@@ -586,7 +620,7 @@ abstract class FormField
     }
 
     /**
-     * Disable field
+     * Disable field.
      *
      * @return $this
      */
@@ -598,7 +632,7 @@ abstract class FormField
     }
 
     /**
-     * Enable field
+     * Enable field.
      *
      * @return $this
      */
@@ -610,7 +644,7 @@ abstract class FormField
     }
 
     /**
-     * Get validation rules for a field if any with label for attributes
+     * Get validation rules for a field if any with label for attributes.
      *
      * @return array|null
      */
@@ -652,7 +686,7 @@ abstract class FormField
     }
 
     /**
-     * Get value property
+     * Get value property.
      *
      * @param mixed|null $default
      * @return mixed
@@ -663,7 +697,7 @@ abstract class FormField
     }
 
     /**
-     * Get default value property
+     * Get default value property.
      *
      * @param mixed|null $default
      * @return mixed
@@ -674,12 +708,196 @@ abstract class FormField
     }
 
     /**
-     * Check if provided value is valid for this type
+     * Check if provided value is valid for this type.
      *
      * @return bool
      */
     protected function isValidValue($value)
     {
         return $value !== null;
+    }
+
+    /**
+     * Method initFilters used to initialize filters
+     * from field options and bind it to the same.
+     *
+     * @return $this
+     */
+    protected function initFilters()
+    {
+        // If override status is set in field options to true
+        // we will change filtersOverride property value to true
+        // so we can override existing filters with registered
+        // alias/name in addFilter method.
+        $overrideStatus = $this->getOption('filters_override', false);
+        if ($overrideStatus) {
+            $this->setFiltersOverride(true);
+        }
+
+        // Get filters and bind it to field.
+        $filters = $this->getOption('filters', []);
+        foreach ($filters as $filter) {
+            $this->addFilter($filter);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method setFilters used to set filters to current filters property.
+     *
+     * @param  array $filters
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     */
+    public function setFilters(array $filters)
+    {
+        $this->clearFilters();
+        foreach ($filters as $filter) {
+            $this->addFilter($filter);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method getFilters returns array of binded filters
+     * if there are any binded. Otherwise empty array.
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @param  string|FilterInterface $filter
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     *
+     * @throws FilterAlreadyBindedException
+     */
+    public function addFilter($filter)
+    {
+        // Resolve filter object from string/object or throw Ex.
+        $filterObj = FilterResolver::instance($filter);
+
+        // If filtersOverride is allowed we will override filter
+        // with same alias/name if there is one with new resolved filter.
+        if ($this->getFiltersOverride()) {
+            if ($key = array_search($filterObj->getName(), $this->getFilters())) {
+                $this->filters[$key] = $filterObj;
+            } else {
+                $this->filters[$filterObj->getName()] = $filterObj;
+            }
+        } else {
+            // If filtersOverride is disabled and we found
+            // equal alias defined we will throw Ex.
+            if (array_key_exists($filterObj->getName(), $this->getFilters())) {
+                $ex = new FilterAlreadyBindedException($filterObj->getName(), $this->getName());
+                throw $ex;
+            }
+
+            // Filter with resolvedFilter alias/name doesn't exist
+            // so we will bind it as new one to field.
+            $this->filters[$filterObj->getName()] = $filterObj;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method removeFilter used to remove filter by provided alias/name.
+     *
+     * @param  string $name
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     */
+    public function removeFilter($name)
+    {
+        $filters = $this->getFilters();
+        if (array_key_exists($name, $filters)) {
+            unset($filters[$name]);
+            $this->filters = $filters;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method removeFilters used to remove filters by provided aliases/names.
+     *
+     * @param  array $filterNames
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     */
+    public function removeFilters(array $filterNames)
+    {
+        $filters = $this->getFilters();
+        foreach ($filterNames as $filterName) {
+            if (array_key_exists($filterName, $filters)) {
+                unset($filters[$filterName]);
+                $this->filters = $filters;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method clearFilters used to empty current filters property.
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     */
+    public function clearFilters()
+    {
+        $this->filters = [];
+        return $this;
+    }
+
+    /**
+     * Method used to set FiltersOverride status to provided value.
+     *
+     * @param $status
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     */
+    public function setFiltersOverride($status)
+    {
+        $this->filtersOverride = $status;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFiltersOverride()
+    {
+        return $this->filtersOverride;
+    }
+
+    /**
+     * Method used to set Unfiltered/Unmutated field value.
+     * Method is called before field value mutating starts - request value filtering.
+     *
+     * @param mixed $value
+     *
+     * @return \Kris\LaravelFormBuilder\Fields\FormField
+     */
+    public function setRawValue($value)
+    {
+        $this->rawValue = $value;
+        return $this;
+    }
+
+    /**
+     * Returns unfiltered raw value of field.
+     *
+     * @return mixed
+     */
+    public function getRawValue()
+    {
+        return $this->rawValue;
     }
 }

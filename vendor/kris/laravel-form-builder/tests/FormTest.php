@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Kris\LaravelFormBuilder\Events\AfterFormValidation;
 use Kris\LaravelFormBuilder\Events\BeforeFormValidation;
 use Kris\LaravelFormBuilder\Fields\InputType;
@@ -695,7 +695,14 @@ class FormTest extends FormBuilderTestCase
         $form->setModel($model);
 
         $form
-            ->add('title', 'text')
+            ->add('title', 'text', [
+                'label_attr' => [
+                    'for' => 'custom_title'
+                ],
+                'attr' => [
+                    'id' => 'custom_title'
+                ]
+            ])
             ->add('song', 'form', [
                 'class' => $customForm
             ])
@@ -718,6 +725,8 @@ class FormTest extends FormBuilderTestCase
         $this->assertEquals('songs[1]', $customForm->getName());
 
         $this->assertEquals('song[title]', $form->song->getChild('title')->getName());
+        $this->assertEquals('custom_title', $form->title->getOption('attr.id'));
+        $this->assertEquals('custom_title', $form->title->getOption('label_attr.for'));
         $this->assertFalse($form->song->name->getOption('label_show'));
         $this->assertCount(2, $form->songs->getChildren());
         $this->assertEquals('lorem', $form->songs->getChild(0)->title->getOption('value'));
@@ -729,6 +738,8 @@ class FormTest extends FormBuilderTestCase
         );
 
         $this->assertNotRegExp('/label.*for="name"/', $view);
+        $this->assertRegExp('/label.*for="custom_title"/', $view);
+        $this->assertRegExp('/input.*id="custom_title"/', $view);
 
         $this->assertTrue($form->song->getFormOption('files'));
 
@@ -1042,5 +1053,61 @@ class FormTest extends FormBuilderTestCase
 
         $form->setFormHelper($helper);
         $form->renderForm();
+    }
+
+    /** @test */
+    public function it_locks_filtering()
+    {
+        $customPlainForm = $this->formBuilder->plain();
+        $customPlainForm->lockFiltering();
+
+        $this->assertTrue(
+            $customPlainForm->isFilteringLocked()
+        );
+    }
+
+    /** @test */
+    public function it_returns_binded_field_filters()
+    {
+        $customPlainForm = $this->formBuilder->plain();
+        $customPlainForm
+            ->add('test_field', 'text', [
+                'filters' => ['Trim', 'Uppercase']
+            ])
+            ->add('test_field2', 'text', [
+                'filters' => ['Uppercase']
+            ])
+        ;
+
+        $expected = [
+            'test_field' => [
+                'Trim'    => new \Kris\LaravelFormBuilder\Filters\Collection\Trim(),
+                'Uppercase' => new \Kris\LaravelFormBuilder\Filters\Collection\Uppercase()
+            ],
+            'test_field2' => [
+                'Uppercase' => new \Kris\LaravelFormBuilder\Filters\Collection\Uppercase()
+            ]
+        ];
+
+        $bindedFields = $customPlainForm->getFilters();
+
+        $this->assertEquals(
+            $expected, $bindedFields
+        );
+    }
+
+    /** @test */
+    public function it_filter_and_mutate_fields_request_values()
+    {
+        $toMutateValue = ' test ';
+        $this->request['test_field'] = $toMutateValue;
+
+        $customPlainForm = $this->formBuilder->plain();
+        $customPlainForm->add('test_field', 'text', [
+            'filters' => ['Trim', 'Uppercase']
+        ]);
+        $customPlainForm->filterFields();
+
+        $this->assertEquals('TEST', $this->request['test_field']);
     }
 }

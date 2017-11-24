@@ -4703,5 +4703,122 @@
             "jquery",
             "laravel"
         ]
+    },
+    {
+        "name": "kris/laravel-form-builder",
+        "version": "1.13.0",
+        "version_normalized": "1.13.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/kristijanhusak/laravel-form-builder.git",
+            "reference": "f7e2fef61ea8106a8a99e21c0d4df6e66f86a85d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/kristijanhusak/laravel-form-builder/zipball/f7e2fef61ea8106a8a99e21c0d4df6e66f86a85d",
+            "reference": "f7e2fef61ea8106a8a99e21c0d4df6e66f86a85d",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/database": "5.*@dev",
+            "illuminate/validation": "5.*@dev",
+            "laravelcollective/html": "5.*",
+            "php": ">=5.6.0"
+        },
+        "require-dev": {
+            "orchestra/testbench": "~3.4",
+            "phpunit/phpunit": "~5.0"
+        },
+        "time": "2017-09-19T12:36:19+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.12.x-dev"
+            },
+            "laravel": {
+                "providers": [
+                    "Kris\\LaravelFormBuilder\\FormBuilderServiceProvider"
+                ],
+                "aliases": {
+                    "FormBuilder": "Kris\\LaravelFormBuilder\\Facades\\FormBuilder"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Kris\\LaravelFormBuilder": "src/"
+            },
+            "classmap": [
+                "tests/FormBuilderTestCase.php"
+            ],
+            "files": [
+                "src/helpers.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kristijan Husak",
+                "email": "husakkristijan@gmail.com"
+            }
+        ],
+        "description": "Laravel form builder - symfony like"
+    },
+    {
+        "name": "twbs/bootstrap",
+        "version": "v3.3.7",
+        "version_normalized": "3.3.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twbs/bootstrap.git",
+            "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+            "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+            "shasum": ""
+        },
+        "replace": {
+            "twitter/bootstrap": "self.version"
+        },
+        "time": "2016-07-25T15:51:55+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jacob Thornton",
+                "email": "jacobthornton@gmail.com"
+            },
+            {
+                "name": "Mark Otto",
+                "email": "markdotto@gmail.com"
+            }
+        ],
+        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+        "homepage": "http://getbootstrap.com",
+        "keywords": [
+            "JS",
+            "css",
+            "framework",
+            "front-end",
+            "less",
+            "mobile-first",
+            "responsive",
+            "web"
+        ]
     }
 ]
