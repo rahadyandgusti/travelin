@@ -1,23 +1,13 @@
 /node_modules
 /public/hot
 /public/storage
-<<<<<<< HEAD
-/storage/*.key
-/vendor
-=======
 /storage/*
 #/vendor
->>>>>>> master
 /.idea
 /.vagrant
 Homestead.json
 Homestead.yaml
 npm-debug.log
-<<<<<<< HEAD
-.env
-
-public/uploads/*
-=======
 yarn-error.log
 .env
->>>>>>> master
+public/uploads/*
